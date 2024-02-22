@@ -58,3 +58,13 @@ cp ./ansible/group_vars/node2.yml ./ansible/group_vars/node3.yml
 ```
 #### Choose node(s) for run. select ```1``` options or select other number for custom node
 #### Select number action. Select option ```3```
+
+## Donations
+If you find it useful and want to invite us for a beer, just click on the donation button. Thanks!
+
+[![Buy Me A Beer](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=TXZKTZ4555FH8)
+
+
+## License
+
+* [The MIT License](https://opensource.org/licenses/MIT)

@@ -59,6 +59,8 @@ cp ./ansible/group_vars/node2.yml ./ansible/group_vars/node3.yml
 #### Choose node(s) for run. select ```1``` options or select other number for custom node
 #### Select number action. Select option ```3```
 
+## [Video instruction for example](https://www.youtube.com/watch?v=cE9f-2b0HTs)
+
 ## Donations
 If you find it useful and want to invite us for a beer, just click on the donation button. Thanks!
 

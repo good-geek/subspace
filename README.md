@@ -4,7 +4,7 @@
 #### 1. Log in to the system with root user privileges.
 #### 2. Update the system.
 ```
-apt update -y 
+apt update -y && apt install git -y
 ```
 #### 3. Generate an SSL certificate without a password and copy it to remote servers.
 ```
@@ -21,17 +21,26 @@ ssh-copy-id -i ~/.ssh/subspace.pub -p 9778 root@REMOTE_IP
 ```
 #### 5. Clone subspace script and cd your work dir
 ```
-git clone ...........
-cd ...........
-chmod +x 
+git clone https://github.com/sahalchenko/subspace
+cd subspace
+chmod +x subspace.sh
 ```
 #### 6. Change your ansible hosts.yml and(or) add your nodes
 ```
-./ansible/hosts.yml
+nano ./ansible/hosts.yml
 ```
 #### 7. Change your vars for nodes and(or) create new var files
+#### change:
+```ansible_host``` ```ansible_port``` ```wallet``` ```subspace_disk_size``` and other if need
 ```
 nano ./ansible/group_vars/node1.yml
 ```
-
+#### change for other node 
+```
+nano ./ansible/group_vars/node2.yml
+```
+#### or create new and change vars too. After that, don't forget to add a free node to the ./ansible/hosts.yml file.
+```
+cp ./ansible/group_vars/node2.yml ./ansible/group_vars/node3.yml
+```
 

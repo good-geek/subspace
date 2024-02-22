@@ -63,18 +63,6 @@
       mode: '0755'
     ignore_errors: True
 
-# PREPARE DATA
-  - name: get percentage DISK space
-    shell:
-      cmd: "df /tmp --output=avail | tail -n 1 | awk -v percent={{ disk_procentage }} '{printf \"%.0fG\\n\", ($1 * percent / (1024 * 1024)) / 100}'"
-    register: disk_size
-
-  - name: disk size
-    debug:
-      msg:
-        - size {{ disk_size.stdout_lines[0] }}
-        - wallet {{ wallet }}
-
 
   - name: Check if subspace_docker directory exists
     stat:

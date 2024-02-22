@@ -10,7 +10,7 @@ apt update -y && apt install git -y
 ```
 ssh-keygen -t rsa -b 2048 -f ~/.ssh/subspace -N ""
 ```
-#### 3. Setting permissions for our certificates.
+#### 3. Set permission.
 ```
 chmod 0600 ~/.ssh/subspace.pub
 ```
@@ -56,5 +56,5 @@ cp ./ansible/group_vars/node2.yml ./ansible/group_vars/node3.yml
 ```
 ./subspace.sh 
 ```
-#### Choose node(s) for run. select ```1``` options or custom node
+#### Choose node(s) for run. select ```1``` options or select other number for custom node
 #### Select number action. Select option ```3```

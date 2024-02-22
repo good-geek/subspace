@@ -9,8 +9,8 @@
   ignore_errors: True
 
 - name: Docker ps output - identify running containers
-  shell: !unsafe >-
-     docker ps --format "{{ .Names }}"
+  shell:
+    cmd: "docker ps -a | awk 'NR>1 {print $NF}' | grep '^{{ inventory_hostname }}'"
   args:
     chdir: "{{ install_dir }}"
   register: docker_ps_output
@@ -18,4 +18,4 @@
 - name: Show content of docker_ps_output
   debug:
     msg:
-     - container is running - {{ docker_ps_output.stdout_lines }}
+      - container is running - {{ docker_ps_output.stdout_lines }}

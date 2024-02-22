@@ -5,7 +5,7 @@
   ansible_ssh_private_key_file: ~/.ssh/subspace #path your private key
   wallet: st....                                #your wallet address
   install_dir: /root/subspace_docker            #path remote work dir
-  subspace_version: gemini-3h-2024-feb-21       #subspace version. See last release https://github.com/subspace/subspace/releases
+  subspace_version: gemini-3h-2024-feb-19       #subspace version. See last release https://github.com/subspace/subspace/releases
   subspace_chain: gemini-3h                     #subspace chain name
   log_line: 10                                  #cont logs line
   subspace_disk_size: 650G                      #size disk for farmer

@@ -43,4 +43,18 @@ nano ./ansible/group_vars/node2.yml
 ```
 cp ./ansible/group_vars/node2.yml ./ansible/group_vars/node3.yml
 ```
+#### 8. Run script
+```
+./subspace.sh 
+```
+#### Ansible is not installed. Would you like to install it? (y/n):
+#### press ```y``` and ```Enter```
 
+#### 9. Choose node(s) for run. If select ```1``` options - All actions will be performed for all nodes.
+#### 10. Select number action. Select option ```2``` for setup and upload docker compose file
+#### 11. After setup run docker compose
+```
+./subspace.sh 
+```
+#### Choose node(s) for run. select ```1``` options or custom node
+#### Select number action. Select option ```3```

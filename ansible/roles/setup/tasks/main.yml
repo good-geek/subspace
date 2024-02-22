@@ -1,0 +1,95 @@
+---
+  - name: install prerequisites for Docker repository
+    become: yes
+    ansible.builtin.apt:
+      pkg:
+        - ca-certificates
+        - curl
+        - gnupg2
+        - lsb-release
+    ignore_errors: True
+
+  - name: add docker apt key
+    become: yes
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+  - name: add docker apt repo
+    become: yes
+    apt_repository:
+      repo: "deb [arch=amd64] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+      state: present
+      update_cache: yes
+
+  - name: install docker and its dependencies
+    become: yes
+    apt:
+      pkg:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+        - docker-buildx-plugin
+        - docker-compose-plugin
+      state: present
+    ignore_errors: True
+
+  - name: start and enable docker daemon
+    become: yes
+    service:
+      name: docker
+      state: started
+      enabled: yes
+
+  - name: start and enable containerd daemon
+    become: yes
+    service:
+      name: containerd
+      state: started
+      enabled: yes
+
+  - name: Install Docker Compose
+    shell: >
+      curl -s https://api.github.com/repos/docker/compose/releases/latest |
+      grep -oP '"tag_name": "\K(.*)(?=")' |
+      xargs -I {} curl -L "https://github.com/docker/compose/releases/download/{}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    args:
+      creates: /usr/local/bin/docker-compose
+    ignore_errors: True
+
+  - name: Make Docker Compose executable
+    file:
+      path: /usr/local/bin/docker-compose
+      mode: '0755'
+    ignore_errors: True
+
+# PREPARE DATA
+  - name: get percentage DISK space
+    shell:
+      cmd: "df /tmp --output=avail | tail -n 1 | awk -v percent={{ disk_procentage }} '{printf \"%.0fG\\n\", ($1 * percent / (1024 * 1024)) / 100}'"
+    register: disk_size
+
+  - name: disk size
+    debug:
+      msg:
+        - size {{ disk_size.stdout_lines[0] }}
+        - wallet {{ wallet }}
+
+
+  - name: Check if subspace_docker directory exists
+    stat:
+      path: "{{ install_dir }}"
+    register: subspace_docker_dir
+
+  - name: Create subspace_docker directory
+    file:
+      path: "{{ install_dir }}"
+      state: directory
+    when: not subspace_docker_dir.stat.exists
+
+  - name: copy docker compose template
+    template:
+      src: docker-compose.yml.j2
+      dest: "{{ install_dir }}/docker-compose.yml"
+
+

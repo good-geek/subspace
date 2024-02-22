@@ -1,0 +1,12 @@
+- name: node steps
+  hosts: subspace
+  gather_facts: true
+  roles:
+    - { role: 'status',     tags: 'status' }
+    - { role: 'setup',      tags: 'setup' }
+    - { role: 'update',     tags: 'update' }
+    - { role: 'start',      tags: 'start' }
+    - { role: 'stop',       tags: 'stop' }
+    - { role: 'lognode',    tags: 'lognode' }
+    - { role: 'logfarmer',  tags: 'logfarmer' }
+    - { role: 'remove',     tags: 'remove' }

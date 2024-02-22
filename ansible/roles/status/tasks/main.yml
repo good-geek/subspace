@@ -1,0 +1,30 @@
+---
+  - name: Get hostname
+    shell: "hostname"
+    register: hostname_result
+
+  - name: Get disk space information
+    shell: "df -h /tmp --output=avail | tail -n 1 | awk '{print $1}'"
+    register: disk_space_result
+
+  - name: Get free memory
+    shell: "free -h | awk '/Mem:/ {print $4}'"
+    register: memory_free_result
+
+  - name: Get CPU usage
+    shell: "top -bn1 | grep 'Cpu(s)' | sed 's/.*, *\\([0-9.]*\\)%* id.*/\\1/' | awk '{print 100 - $1\"%\"}'"
+    register: cpu_usage_result
+
+  - name: current dir
+    shell: basename "$PWD"
+    register: current_dir
+
+  - name: Display data
+    debug:
+      msg:
+        #- HOSTNAME  - {{ hostname_result.stdout_lines[0] }}
+        - DSK free  - {{ disk_space_result.stdout_lines[0] }}
+        - RAM free  - {{ memory_free_result.stdout_lines[0] }}
+        - CPU used  - {{ cpu_usage_result.stdout_lines[0] }}
+        - host {{ inventory_hostname }}
+        - dir {{ current_dir.stdout_lines[0] }}

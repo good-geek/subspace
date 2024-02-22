@@ -1,0 +1,16 @@
+---
+  - name: Check if subspace_docker directory exists
+    stat:
+      path: "{{ install_dir }}"
+    register: subspace_docker_dir
+
+  - name: Create subspace_docker directory
+    file:
+      path: "{{ install_dir }}"
+      state: directory
+    when: not subspace_docker_dir.stat.exists
+
+  - name: copy docker compose template
+    template:
+      src: docker-compose.yml.j2
+      dest: "{{ install_dir }}/docker-compose.yml"

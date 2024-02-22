@@ -1,0 +1,27 @@
+---
+  - name: current dir
+    shell: basename "$PWD"
+    register: current_dir
+    args:
+      chdir: "{{ install_dir }}"
+
+  - name: remove containers
+    shell:
+      cmd: "docker rm {{ current_dir.stdout_lines[0] }}-node-1 {{ current_dir.stdout_lines[0] }}-farmer-1"
+    args:
+      chdir: "{{ install_dir }}"
+    ignore_errors: True
+
+  - name: remove images
+    shell:
+      cmd: "docker images -a | grep '{{ subspace_version }}' | awk '{print $3}' | xargs docker rmi"
+    args:
+      chdir: "{{ install_dir }}"
+    ignore_errors: True
+
+  - name: remove volumes
+    shell:
+      cmd: "docker volume rm {{ current_dir.stdout_lines[0] }}_farmer-data {{ current_dir.stdout_lines[0] }}_node-data"
+    args:
+      chdir: "{{ install_dir }}"
+    ignore_errors: True

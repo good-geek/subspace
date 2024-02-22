@@ -1,0 +1,59 @@
+version: "3.7"
+services:
+  node:
+    image: ghcr.io/subspace/node:{{ subspace_version }}
+    container_name: {{ inventory_hostname }}-node
+    volumes:
+      - node-data:/var/subspace:rw
+    ports:
+      - "0.0.0.0:30333:30333/udp"
+      - "0.0.0.0:30333:30333/tcp"
+      - "0.0.0.0:30433:30433/udp"
+      - "0.0.0.0:30433:30433/tcp"
+    restart: unless-stopped
+    command:
+      [
+        "run",
+        "--chain", "{{ subspace_chain }}",
+        "--base-path", "/var/subspace",
+        "--listen-on", "/ip4/0.0.0.0/tcp/30333",
+        "--dsn-listen-on", "/ip4/0.0.0.0/udp/30433/quic-v1",
+        "--dsn-listen-on", "/ip4/0.0.0.0/tcp/30433",
+        "--rpc-cors", "all",
+        "--rpc-methods", "unsafe",
+        "--rpc-listen-on", "0.0.0.0:9944",
+        "--farmer",
+        "--in-peers",  "100",
+        "--out-peers", "100",
+        "--name", "{{ inventory_hostname }}"
+      ]
+    healthcheck:
+      timeout: 5s
+      interval: 30s
+      retries: 60
+
+  farmer:
+    depends_on:
+      node:
+        condition: service_healthy
+    image: ghcr.io/subspace/farmer:{{ subspace_version }}
+    container_name: {{ inventory_hostname }}-farmer
+    volumes:
+      - farmer-data:/var/subspace:rw
+    ports:
+      - "0.0.0.0:30533:30533/udp"
+      - "0.0.0.0:30533:30533/tcp"
+    restart: unless-stopped
+    command:
+      [
+        "farm",
+        "--node-rpc-url", "ws://node:9944",
+        "--listen-on", "/ip4/0.0.0.0/udp/30533/quic-v1",
+        "--listen-on", "/ip4/0.0.0.0/tcp/30533",
+        "--reward-address", "{{ wallet }}",
+        "--farm-during-initial-plotting", "false",
+        "path=/var/subspace,size={{ subspace_disk_size }}"
+      ]
+volumes:
+  node-data:
+  farmer-data:

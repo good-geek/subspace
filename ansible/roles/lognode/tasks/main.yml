@@ -1,0 +1,17 @@
+---
+  - name: current dir
+    shell: basename "$PWD"
+    register: current_dir
+    args:
+      chdir: "{{ install_dir }}"
+
+  - name: Log node
+    shell:
+      cmd: "docker logs {{ inventory_hostname }}-node --tail={{ log_line }}"
+    register: node_logs
+    args:
+      chdir: "{{ install_dir }}"
+
+  - name: Display data
+    debug:
+      msg: "{{ node_logs.stderr_lines }}"

@@ -1,0 +1,7 @@
+---
+
+  - name: stop docker compose
+    shell:
+      cmd: "docker compose down"
+    args:
+     chdir: "{{ install_dir }}"

@@ -63,7 +63,6 @@
       mode: '0755'
     ignore_errors: True
 
-
   - name: Check if subspace_docker directory exists
     stat:
       path: "{{ install_dir }}"
